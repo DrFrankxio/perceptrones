@@ -1,0 +1,57 @@
+<script>
+class Perceptron {
+  constructor(inputSize, learningRate = 0.1) {
+    this.weights = Array(inputSize).fill(0).map(() => Math.random() * 2 - 1); // Random weights
+    this.bias = Math.random() * 2 - 1; // Random bias
+    this.learningRate = learningRate;
+  }
+
+  // Activation function (step function)
+  activate(sum) {
+    return sum >= 0 ? 1 : 0;
+  }
+
+  // Predict output for given inputs
+  predict(inputs) {
+    const weightedSum = inputs.reduce((sum, input, i) => sum + input * this.weights[i], this.bias);
+    return this.activate(weightedSum);
+  }
+
+  // Train the perceptron with labeled data
+  train(trainingData, epochs = 100) {
+    for (let epoch = 0; epoch < epochs; epoch++) {
+      trainingData.forEach(({ inputs, label }) => {
+        const prediction = this.predict(inputs);
+        const error = label - prediction;
+
+        // Update weights and bias
+        this.weights = this.weights.map((w, i) => w + this.learningRate * error * inputs[i]);
+        this.bias += this.learningRate * error;
+      });
+    }
+  }
+}
+
+setInterval(()=>{
+  // Example usage
+  const trainingData = [
+    { inputs: [0, 0], label: I0_0.value },
+    { inputs: [0, 1], label: I0_1.value },
+    { inputs: [1, 0], label: I1_0.value },
+    { inputs: [1, 1], label: I1_1.value },
+  ];
+
+  const perceptron = new Perceptron(2);
+  perceptron.train(trainingData, 100);
+
+  console.clear()
+  O0_0.value=perceptron.predict([0, 0]); // Output: 0
+  O0_1.value=perceptron.predict([0, 1]); // Output: 0
+  O1_0.value=perceptron.predict([1, 0]); // Output: 0
+  O1_1.value=perceptron.predict([1, 1]); // Output: 0
+},1)
+</script>
+[0,0]=><input id="I0_0">=><input id="O0_0"><br>
+[0,1]=><input id="I0_1">=><input id="O0_1"><br>
+[1,0]=><input id="I1_0">=><input id="O1_0"><br>
+[1,1]=><input id="I1_1">=><input id="O1_1"><br>
