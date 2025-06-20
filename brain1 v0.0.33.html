@@ -1,0 +1,147 @@
+<script>
+class Perceptron {
+  constructor(inputSize, learningRate = 0.1) {
+    this.weights = Array(inputSize).fill(0).map(() => Math.random() * 2 - 1); // Random weights
+    this.bias = Math.random() * 2 - 1; // Random bias
+    this.learningRate = learningRate;
+  }
+
+  // Activation function (step function)
+  activate(sum) {
+    return sum >= 0 ? 1 : 0;
+  }
+
+  // Predict output for given inputs
+  predict(inputs) {
+    const weightedSum = inputs.reduce((sum, input, i) => sum + input * this.weights[i], this.bias);
+    return this.activate(weightedSum);
+  }
+
+  // Train the perceptron with labeled data
+  train(trainingData, epochs = 100) {
+    for (let epoch = 0; epoch < epochs; epoch++) {
+      trainingData.forEach(({ inputs, label }) => {
+        const prediction = this.predict(inputs);
+        const error = label - prediction;
+
+        // Update weights and bias
+        this.weights = this.weights.map((w, i) => w + this.learningRate * error * inputs[i]);
+        this.bias += this.learningRate * error;
+      });
+    }
+  }
+}
+
+setInterval(()=>{
+  if(P1I0_0.value!="0"&&P1I0_0.value!="1"){
+    P1I0_0.value=0
+  }
+  if(P1I0_1.value!="0"&&P1I0_1.value!="1"){
+    P1I0_1.value=0
+  }
+  if(P1I1_0.value!="0"&&P1I1_0.value!="1"){
+    vI1_0.value=0
+  }
+  if(P1I1_1.value!="0"&&P1I1_1.value!="1"){
+    P1I1_1.value=0
+  }
+  // Example usage
+  const trainingData = [
+    { inputs: [0, 0], label: P1I0_0.value },
+    { inputs: [0, 1], label: P1I0_1.value },
+    { inputs: [1, 0], label: P1I1_0.value },
+    { inputs: [1, 1], label: P1I1_1.value },
+  ];
+
+  // Example usage
+  const trainingData2 = [
+    { inputs: [0, 0], label: P2I0_0.value },
+    { inputs: [0, 1], label: P2I0_1.value },
+    { inputs: [1, 0], label: P2I1_0.value },
+    { inputs: [1, 1], label: P2I1_1.value },
+  ];
+
+  const perceptron = new Perceptron(2);
+  perceptron.train(trainingData, 100);
+
+  const perceptron2 = new Perceptron(2);
+  perceptron2.train(trainingData2, 100);
+
+  P1O0_0.value="["+perceptron.predict([0, 0]); // Output: 0
+  P1O0_1.value="["+perceptron.predict([0, 1]); // Output: 0
+  P1O1_0.value="["+perceptron.predict([1, 0]); // Output: 0
+  P1O1_1.value="["+perceptron.predict([1, 1]); // Output: 0
+
+  P1O0_0.value+=","+perceptron2.predict([0, 0])+"]"; // Output: 0
+  P1O0_1.value+=","+perceptron2.predict([0, 1])+"]"; // Output: 0
+  P1O1_0.value+=","+perceptron2.predict([1, 0])+"]"; // Output: 0
+  P1O1_1.value+=","+perceptron2.predict([1, 1])+"]"; // Output: 0
+},50)
+</script>
+Capa 1 con 2 perceptrones:<br>
+[0,0]=>[<input id="P1I0_0"value='0'>,<input id="P2I0_0"value='0'>]=><input id="P1O0_0"class="output"><br>
+[0,1]=>[<input id="P1I0_1"value='0'>,<input id="P2I0_1"value='0'>]=><input id="P1O0_1"class="output"><br>
+[1,0]=>[<input id="P1I1_0"value='0'>,<input id="P2I1_0"value='0'>]=><input id="P1O1_0"class="output"><br>
+[1,1]=>[<input id="P1I1_1"value='0'>,<input id="P2I1_1"value='0'>]=><input id="P1O1_1"class="output"><br>
+<img src="brain1 v0.0.30.png"></img><br>
+<style>
+body{
+  background-color: #444;
+  color:#fff;
+}
+
+input[type=file]::file-selector-button {
+  background-color: #888;
+  display:none;
+  transition: 1s;
+}
+
+input[type=file]::file-selector-button:hover {
+  background-color: #888;
+  border: 0px solid #000;
+  transition: 1s;
+}
+
+input, body, textarea, button{
+  font-family:consolas;
+  font-size: 50px;
+  transition: 1s;
+}
+input, button{
+  border:0px;
+  background-color:#444;
+  color:#fff;
+  transition: 1s;
+  width:30px;
+}
+.output{
+  width:150px;
+}
+input:hover, button:hover{
+  border:0px;
+  background-color:#444;
+  color:#000;
+  transition: 0.5s;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: 1s;
+}
+textarea{
+  border:0px;
+  background-color:#888;
+  transition: 1s;
+}
+textarea:hover{
+  border:0px;
+  background-color:#bbb;
+  transition: 1s;
+}
+textarea:focus, input:focus{
+  outline: none;
+  transition: 1s;
+}
+</style>
